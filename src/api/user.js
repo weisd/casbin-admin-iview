@@ -1,4 +1,5 @@
 import axios from '@/libs/api.request'
+import {parseJWT} from '@/libs/jwt'
 
 export const login = ({ userName, password }) => {
   const data = {
@@ -14,14 +15,7 @@ export const login = ({ userName, password }) => {
 
 export const getUserInfo = (token) => {
   return new Promise((resolve, reject) => {
-    resolve({'data': {'id': 'test', 'name': 'testname', 'avatar': ''}})
-
-    // reject(err)
-
-    // 如果你的退出登录无需请求接口，则可以直接使用下面三行代码而无需使用logout调用接口
-    // commit('setToken', '')
-    // commit('setAccess', [])
-    // resolve()
+    resolve({'data': parseJWT(token).payloadObj.author})
   })
 
   // return axios.request({
