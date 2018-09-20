@@ -48,7 +48,7 @@ export default [
     name: 'doc',
     meta: {
       title: '文档',
-      href: 'https://lison16.github.io/iview-admin-doc/#/',
+      href: 'https://www.baidu.com',
       icon: 'ios-book'
     }
   },
@@ -287,6 +287,35 @@ export default [
         },
         component: () => import('@/view/multilevel/level-2-3.vue')
       },
+    ]
+  },
+  {
+    path:'/form',
+    name: 'form',
+    meta:{
+      // title:'表单',
+      hide: true
+    },
+    component:Main,
+    children: [
+      {
+        path: 'form_page',
+        name: 'form_page',
+        meta: {
+          icon: 'ios-navigate',
+          title: '表单'
+        },
+        component: () => import('@/view/form/form.vue')
+      },
+      {
+        path: 'table_page',
+        name: 'table_page',
+        meta: {
+          icon: 'ios-navigate',
+          title: 'table'
+        },
+        component: () => import('@/view/table/table.vue')
+      }
     ]
   },
   {

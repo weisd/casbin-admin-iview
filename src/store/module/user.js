@@ -31,13 +31,13 @@ export default {
     // 登录
     handleLogin ({ commit }, {userName, password}) {
       userName = userName.trim()
+      password = password.trim()
       return new Promise((resolve, reject) => {
         login({
           userName,
           password
         }).then(res => {
-          const data = res.data
-          commit('setToken', data.token)
+          commit('setToken', res.data.token)
           resolve()
         }).catch(err => {
           reject(err)
@@ -65,10 +65,10 @@ export default {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(res => {
           const data = res.data
-          commit('setAvator', data.avator)
-          commit('setUserName', data.user_name)
-          commit('setUserId', data.user_id)
-          commit('setAccess', data.access)
+          // commit('setAvator', data.avator)
+          // commit('setUserName', data.user_name)
+          // commit('setUserId', data.user_id)
+          // commit('setAccess', data.access)
           resolve(data)
         }).catch(err => {
           reject(err)

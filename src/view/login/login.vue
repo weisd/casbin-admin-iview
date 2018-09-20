@@ -1,5 +1,5 @@
 <style lang="less">
-  @import './login.less';
+@import "./login.less";
 </style>
 
 <template>
@@ -7,8 +7,8 @@
     <div class="login-con">
       <Card icon="log-in" title="欢迎登录" :bordered="false">
         <div class="form-con">
-          <login-form @on-success-valid="handleSubmit"></login-form>
-          <p class="login-tip">输入任意用户名和密码即可</p>
+          <login-form @on-success-valid="handleSubmit" :errorsMsg="err"></login-form>
+          <p class="login-tip">输入用户名和密码</p>
         </div>
       </Card>
     </div>
@@ -22,24 +22,33 @@ export default {
   components: {
     LoginForm
   },
+
+  data () {
+    return {
+      err: ''
+    }
+  },
   methods: {
-    ...mapActions([
-      'handleLogin',
-      'getUserInfo'
-    ]),
+    ...mapActions(['handleLogin', 'getUserInfo']),
     handleSubmit ({ userName, password }) {
-      this.handleLogin({ userName, password }).then(res => {
-        this.getUserInfo().then(res => {
-          this.$router.push({
-            name: 'home'
-          })
+      this.err = ''
+      this.handleLogin({ userName, password })
+        .then(res => {
+          console.log(res)
+          // this.getUserInfo().then(res => {
+          //   this.$router.push({
+          //     name: "home"
+          //   });
+          // });
         })
-      })
+        .catch(err => {
+          this.err = err.response && err.response.data.message
+          console.log('handleLogin  err', err)
+        })
     }
   }
 }
 </script>
 
 <style>
-
 </style>

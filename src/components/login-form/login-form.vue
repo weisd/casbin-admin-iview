@@ -7,7 +7,7 @@
         </span>
       </Input>
     </FormItem>
-    <FormItem prop="password">
+    <FormItem ref="PasswdForm" prop="password" :error="passerr">
       <Input type="password" v-model="form.password" placeholder="请输入密码">
         <span slot="prepend">
           <Icon :size="14" type="md-lock"></Icon>
@@ -23,6 +23,7 @@
 export default {
   name: 'LoginForm',
   props: {
+    errorsMsg: '',
     userNameRules: {
       type: Array,
       default: () => {
@@ -42,12 +43,19 @@ export default {
   },
   data () {
     return {
+      passerr: this.errorsMsg,
       form: {
         userName: 'super_admin',
         password: ''
       }
     }
   },
+  watch: {
+    errorsMsg (val) {
+      this.passerr = val
+    }
+  },
+
   computed: {
     rules () {
       return {
