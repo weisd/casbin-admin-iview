@@ -34,12 +34,11 @@ export default {
       this.err = ''
       this.handleLogin({ userName, password })
         .then(res => {
-          console.log(res)
-          // this.getUserInfo().then(res => {
-          //   this.$router.push({
-          //     name: "home"
-          //   });
-          // });
+          this.getUserInfo().then(res => {
+            this.$router.push({
+              name: 'home'
+            })
+          })
         })
         .catch(err => {
           this.err = err.response && err.response.data.message

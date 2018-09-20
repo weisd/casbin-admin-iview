@@ -64,10 +64,11 @@ export default {
     getUserInfo ({ state, commit }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(res => {
+          console.log(res)
           const data = res.data
-          // commit('setAvator', data.avator)
-          // commit('setUserName', data.user_name)
-          // commit('setUserId', data.user_id)
+          commit('setAvator', data.avator)
+          commit('setUserName', data.name)
+          commit('setUserId', data.id)
           // commit('setAccess', data.access)
           resolve(data)
         }).catch(err => {
