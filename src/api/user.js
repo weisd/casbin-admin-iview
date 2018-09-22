@@ -14,9 +14,7 @@ export const login = ({ userName, password }) => {
 }
 
 export const getUserInfo = (token) => {
-  return new Promise((resolve, reject) => {
-    resolve({'data': parseJWT(token).payloadObj.author})
-  })
+  return Promise.resolve({'data': parseJWT(token).payloadObj.author})
 
   // return axios.request({
   //   url: 'get_info',
@@ -29,7 +27,41 @@ export const getUserInfo = (token) => {
 
 export const logout = (token) => {
   return axios.request({
-    url: 'logout',
+    url: '/user/logout',
     method: 'post'
+  })
+}
+
+export const getUserList = (data) => {
+  return axios.request({
+    url: '/user',
+    method: 'get',
+    data
+  })
+}
+
+// getUserInfoByID getUserInfoByID
+// params id
+export const getUserInfoByID = (data) => {
+  return axios.request({
+    url: '/user/info',
+    method: 'get',
+    params: data
+  })
+}
+
+export const postUserAdd = (data) => {
+  return axios.request({
+    url: '/user/add',
+    method: 'post',
+    data
+  })
+}
+
+export const postUserUpdate = (data) => {
+  return axios.request({
+    url: '/user/update',
+    method: 'post',
+    data
   })
 }

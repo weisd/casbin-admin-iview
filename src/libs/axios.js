@@ -1,5 +1,8 @@
 import axios from 'axios'
 // import { Spin } from 'iview'
+import { getToken } from './util'
+import store from '@/store'
+import router from '@/router'
 class HttpRequest {
   constructor (baseUrl = baseURL) {
     this.baseUrl = baseUrl
@@ -9,8 +12,12 @@ class HttpRequest {
     const config = {
       baseURL: this.baseUrl,
       headers: {
-        //
+
       }
+    }
+    const token = getToken()
+    if (token) {
+      config.headers['Authorization'] = 'Bearer ' + token
     }
     return config
   }
@@ -39,6 +46,13 @@ class HttpRequest {
       return { data, status }
     }, error => {
       this.distroy(url)
+      if (error.response && error.response.status === 401) {
+        store.dispatch('flushUser')
+        router.push({
+          name: 'login' // 跳转到home页
+        })
+        return false
+      }
       return Promise.reject(error)
     })
   }

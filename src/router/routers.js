@@ -44,6 +44,66 @@ export default [
     ]
   },
   {
+    path:'/casbin',
+    name:'casbin',
+    component:Main,
+    meta:{
+      title: '权限管理',
+      icon:'logo-freebsd-devil'
+    },
+    children: [
+      {
+        path: 'admin',
+        name: 'admin',
+        meta: {
+          icon: 'ios-people',
+          title: '管理员'
+        },
+        component: () => import('@/view/casbin/admin/admin.vue')
+      },
+      {
+        path: 'admin_add',
+        name: 'admin_add',
+        meta: {
+          icon: 'ios-add-circle',
+          hideInMenu: true,
+          title: '添加管理员'
+
+        },
+        component: () => import('@/view/casbin/admin/add.vue')
+      },
+      {
+        path: 'admin_info',
+        name: 'admin_info',
+        meta: {
+          // icon: 'ios-add-circle',
+          hideInMenu: true,
+          title: '编辑管理员'
+
+        },
+        component: () => import('@/view/casbin/admin/add.vue')
+      },
+      {
+        path: 'permission',
+        name: 'permission',
+        meta: {
+          icon: 'ios-flag',
+          title: '权限管理'
+        },
+        component: () => import('@/view/join-page.vue')
+      },
+      {
+        path: 'role',
+        name: 'rols',
+        meta: {
+          icon: 'md-person-add',
+          title: '角色管理'
+        },
+        component: () => import('@/view/join-page.vue')
+      }
+    ]
+  },
+  {
     path: '',
     name: 'doc',
     meta: {

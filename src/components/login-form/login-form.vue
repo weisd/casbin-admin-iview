@@ -45,7 +45,7 @@ export default {
     return {
       passerr: this.errorsMsg,
       form: {
-        userName: 'super_admin',
+        userName: '',
         password: ''
       }
     }

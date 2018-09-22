@@ -22,6 +22,7 @@
     "iview-area": "^1.5.17",
     "js-cookie": "^2.2.0",
     "jsrsasign": "^8.0.12",
+    "moment": "^2.22.2",
     "simplemde": "^1.11.2",
     "sortablejs": "^1.7.0",
     "vue": "^2.5.10",
