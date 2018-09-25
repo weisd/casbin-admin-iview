@@ -284,7 +284,7 @@ export default {
         }
       }
 
-      this.$router.push({name: 'admin', query: {'querys[]': querys, order: [this.orderby, this.orderbyVal].join(','), limit: this.searchLimit, _: new Date().getTime()}})
+      this.$router.push({name: 'admin', query: {'querys[]': querys, order: this.orderby + ' ' + this.orderbyVal, limit: this.searchLimit, _: new Date().getTime()}})
     },
     fetchList () {
       console.log(this.$route.query)
@@ -319,6 +319,19 @@ export default {
         this.searchInputs = [{field: 'id', cond: '=', value: ''}]
       } else {
         this.showSearchBar = true
+      }
+
+      if (this.$route.query.limit) {
+        this.searchLimit = parseInt(this.$route.query.limit)
+      }
+
+      if (this.$route.query.order) {
+        const arr = this.$route.query.order.split(' ')
+        console.log(arr)
+        if (arr.length === 2) {
+          this.orderby = arr[0]
+          this.orderbyVal = arr[1]
+        }
       }
 
       this.getUserList({querys: newQuerys, limit: this.searchLimit, order: this.orderby + ' ' + this.orderbyVal}).catch(err => {
