@@ -36,7 +36,7 @@ export const getUserList = (data) => {
   return axios.request({
     url: '/user',
     method: 'get',
-    data
+    params: data
   })
 }
 

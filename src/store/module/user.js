@@ -89,11 +89,13 @@ export default {
       })
     },
     // 取用户列表
-    getUserList ({ commit }, {query, args}) {
+    getUserList ({ commit }, args) {
+      console.log(args)
       return new Promise((resolve, reject) => {
-        getUserList(query, args).then(res => {
+        getUserList(args).then(res => {
           console.log(res)
           commit('updateList', res.data)
+          resolve(res)
         }).catch(err => {
           reject(err)
         })

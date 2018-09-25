@@ -11,7 +11,6 @@
       <Form v-if="showSearchBar" inline ref="formValidate" :model="formValidate" :rules="ruleValidate" >
         <div v-for="(v, i) in searchInputs" :key="i">
         <Row :gutter="16" >
-
           <Col span="4">
             <Select  v-model="v.field"  placement="bottom">
               <Option v-for="item in searchFields" :value="item" :key="item">{{ item }}</Option>
@@ -55,7 +54,7 @@
           </Col>
           <Col span="4">
             <Select v-model="searchLimit">
-              <Option v-for="item in [10,20,50,100]" :value="item" :key="item">{{ item }}</Option>
+              <Option v-for="item in [1,10,20,50,100]" :value="item" :key="item">{{ item }}</Option>
             </Select>
           </Col>
         </Row>
@@ -68,7 +67,7 @@
             <Button @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
           </Col>
           <Col  span="2"  >
-          <Button @click="handleAddInput()" >添加</Button>
+          <Button @click="handleAddInput()" >添加条件</Button>
           </Col>
         </Row>
     </Form>
@@ -108,6 +107,7 @@ export default {
       searchLimit: 50,
       orderby: 'id',
       orderbyVal: 'desc',
+      // searchInputs: [],
       searchInputs: [{field: 'id', cond: '=', value: ''}],
       selectType: [
         {value: '=', text: '='},
@@ -117,10 +117,9 @@ export default {
         {value: '<=', text: '<='},
         {value: '!=', text: '!='},
         {value: 'LIKE', text: 'LIKE'},
-        {value: 'LIKE %...%', text: 'LIKE %...%'},
         {value: 'NOT LIKE', text: 'NOT LIKE'},
-        {value: 'IN (...)', text: 'IN (...)'},
-        {value: 'NOT IN (...)', text: 'NOT IN (...)'},
+        {value: 'IN', text: 'IN (...)'},
+        {value: 'NOT IN', text: 'NOT IN (...)'},
         {value: 'BETWEEN', text: 'BETWEEN'},
         {value: 'NOT BETWEEN', text: 'NOT BETWEEN'},
         {value: 'IS NULL', text: 'IS NULL'},
@@ -269,19 +268,75 @@ export default {
       this.searchInputs.splice(i, 1)
     },
     handleAddInput () {
-      this.searchInputs.push({field: '', cond: '', value: ''})
+      this.searchInputs.push({field: '', cond: '=', value: ''})
     },
     handleReset () {
       this.searchInputs = [{field: 'id', cond: '=', value: ''}]
     },
     handleSubmit (name) {
-      console.log(this.searchInputs)
+      let querys = []
+      for (const k in this.searchInputs) {
+        if (this.searchInputs.hasOwnProperty(k)) {
+          const v = this.searchInputs[k]
+          if (v.value) {
+            querys.push([v.field, v.cond, v.value].join(','))
+          }
+        }
+      }
+
+      this.$router.push({name: 'admin', query: {'querys[]': querys, order: [this.orderby, this.orderbyVal].join(','), limit: this.searchLimit, _: new Date().getTime()}})
+    },
+    fetchList () {
+      console.log(this.$route.query)
+      let fields = []
+      const querys = this.$route.query['querys[]']
+      let newQuerys = []
+
+      if (querys) {
+        let searchQuerys = []
+        if (typeof (querys) === 'string') {
+          searchQuerys = [querys]
+        } else {
+          searchQuerys = querys
+        }
+
+        for (const key in searchQuerys) {
+          if (searchQuerys.hasOwnProperty(key)) {
+            const v = searchQuerys[key]
+            const vs = v.split(',')
+            if (vs.length > 3) {
+              vs[2] = vs.slice(2).join(',')
+            }
+            fields.push({field: vs[0], cond: vs[1], value: vs[2]})
+            newQuerys.push(v)
+          }
+        }
+      }
+
+      this.searchInputs = fields
+
+      if (fields.length === 0) {
+        this.searchInputs = [{field: 'id', cond: '=', value: ''}]
+      } else {
+        this.showSearchBar = true
+      }
+
+      this.getUserList({querys: newQuerys, limit: this.searchLimit, order: this.orderby + ' ' + this.orderbyVal}).catch(err => {
+        err.response && this.$Message.error({
+          content: err.response.data.message,
+          duration: 10,
+          closable: true
+        })
+      })
     }
 
   },
 
   mounted () {
-    this.getUserList('1', [])
+    this.fetchList()
+  },
+  watch: {
+    '$route': 'fetchList'
   }
 }
 </script>
