@@ -74,7 +74,7 @@
     </Card>
     <div style="margin: 10px;overflow: hidden">
         <div style="float: left;">
-          <router-link to="admin_add"><Button type="primary"  icon="ios-add-circle">新建</Button></router-link>
+          <router-link to="admin/add"><Button type="primary"  icon="ios-add-circle">新建</Button></router-link>
 
         </div>
         <div style="float: right;">
@@ -216,7 +216,18 @@ export default {
                     this.remove(params.index)
                   }
                 }
-              }, '删除')
+              }, '删除'),
+              h('Button', {
+                props: {
+                  type: 'success',
+                  size: 'small'
+                },
+                on: {
+                  click: () => {
+                    this.$router.push({name: 'role/user', query: {id: this.tableData[params.index].id}})
+                  }
+                }
+              }, '更新角色')
             ])
           }
 
@@ -249,7 +260,7 @@ export default {
       this.showSearchBar = !this.showSearchBar
     },
     show (idx) {
-      this.$router.push({name: 'admin_info', query: {id: this.tableData[idx].id}})
+      this.$router.push({name: 'admin/info', query: {id: this.tableData[idx].id}})
       // this.$Message.info('显示ID：'+this.tableData[idx].id);
     },
     remove (idx) {
