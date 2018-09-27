@@ -63,15 +63,20 @@ export default {
                 //     h('Col',{props:{span:6}},"origin"),
                 //   ]
                 // ),
-                ...params.row.permission_list.map((obj) => {
+                ...params.row.permission_list.map((obj, i) => {
+                  let cont = []
+                  cont.push(...[
+                    h('Col', {props: {span: 8}}, obj.name),
+                    h('Col', {props: {span: 8}}, obj.path),
+                    h('Col', {props: {span: 4}}, obj.method),
+                    h('Col', {props: {span: 4}}, obj.origin)
+                  ])
+                  if (i < params.row.permission_list.length - 1) {
+                    cont.push(h('Divider'))
+                  }
+
                   return h('Row',
-                    [
-                      h('Col', {props: {span: 8}}, obj.name),
-                      h('Col', {props: {span: 8}}, obj.path),
-                      h('Col', {props: {span: 4}}, obj.method),
-                      h('Col', {props: {span: 4}}, obj.origin),
-                      h('Divider')
-                    ]
+                    cont
                   )
                 })
               ]
