@@ -1,9 +1,10 @@
-import { getPermissionList, postPermissionDel, getRoleList } from '@/api/casbin'
+import { getPermissionList, postPermissionDel, getRoleList, getRoleUsers, postRoleDel } from '@/api/casbin'
 
 export default {
   state: {
     permissionlist: [],
-    rolelist: []
+    rolelist: [],
+    roleuser: {}
   },
   mutations: {
     updatePermissionList (state, list) {
@@ -26,6 +27,24 @@ export default {
     },
     updateRoleList (state, list) {
       state.rolelist = list
+    },
+    updateRoleUser (state, list) {
+      state.roleuser = list
+    },
+    delRoleByName (state, name) {
+      let list = state.rolelist
+      let idx = -1
+      for (let i = 0; i < list.length; i++) {
+        const info = list[i]
+        if (info.role === name) {
+          idx = i
+        }
+      }
+
+      if (idx > -1) {
+        list.splice(idx, 1)
+        state.rolelist = list
+      }
     }
   },
   actions: {
@@ -57,6 +76,32 @@ export default {
           console.log(res)
           if (res.data) {
             commit('updateRoleList', res.data)
+            resolve(res)
+          }
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    getRoleUsers ({ commit }, args) {
+      return new Promise((resolve, reject) => {
+        getRoleUsers(args).then(res => {
+          console.log(res)
+          if (res.data) {
+            commit('updateRoleUser', res.data)
+            resolve(res)
+          }
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    postRoleDel ({ commit }, args) {
+      return new Promise((resolve, reject) => {
+        postRoleDel(args).then(res => {
+          console.log(res)
+          if (res.data) {
+            commit('delRoleByName', args.role)
             resolve(res)
           }
         }).catch(err => {

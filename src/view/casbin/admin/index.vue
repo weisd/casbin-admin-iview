@@ -104,6 +104,7 @@ export default {
 
   data () {
     return {
+      userRoles:this.$store.state.casbin.roleuser,
       searchLimit: 50,
       orderby: 'id',
       orderbyVal: 'desc',
@@ -157,6 +158,19 @@ export default {
         {
           title: '手机号',
           key: 'phone'
+        },
+        {
+          title: '角色',
+          render: (h, params) => {
+            if (this.userRoles[params.row.id]) {
+              return h('div',
+                this.userRoles[params.row.id].map((role)=>{
+                  console.log('role..', role)
+                  return h('div',role)
+                })
+              )
+            }
+          }
         },
         {
           title: '状态',
@@ -224,7 +238,7 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.$router.push({name: 'role/user', query: {id: this.tableData[params.index].id}})
+                    this.$router.push({name: 'admin/role', query: {id: this.tableData[params.index].id}})
                   }
                 }
               }, '更新角色')
@@ -248,7 +262,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getUserList']),
+    ...mapActions(['getUserList','getRoleUsers']),
     formatDate (date) {
       return date.substr(0, 10)
     },
@@ -352,11 +366,19 @@ export default {
           closable: true
         })
       })
+    },
+    getRoleUsersByUid (id) {
+       if ( this.userRoles["id"]) {
+         return this.userRoles["id"]
+       }
+
+       return []
     }
 
   },
 
   mounted () {
+    this.getRoleUsers()
     this.fetchList()
   },
   watch: {

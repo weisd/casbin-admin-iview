@@ -47,3 +47,35 @@ export const postRolePermissionAdd = (data) => {
     data
   })
 }
+
+export const getRoleUsers = (data) => {
+  return axios.request({
+    url: '/casbin/role/user',
+    method: 'get',
+    params: data
+  })
+}
+
+export const getUserRolesByUID = (data) => {
+  return axios.request({
+    url: '/casbin/user/role/list',
+    method: 'get',
+    params: data
+  })
+}
+
+export const postRoleUserAdd = (data) => {
+  return axios.request({
+    url: '/casbin/user/role/add',
+    method: 'post',
+    data
+  })
+}
+
+export const postRoleDel = (data) => {
+  return axios.request({
+    url: '/casbin/role/del',
+    method: 'post',
+    data
+  })
+}

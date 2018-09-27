@@ -49,6 +49,7 @@ export default {
         },
         {
           title: '权限列表',
+          minWidth: 120,
           key: 'permission_list',
           render: (h, params) => {
             console.log(params)
@@ -65,10 +66,10 @@ export default {
                 ...params.row.permission_list.map((obj) => {
                   return h('Row',
                     [
-                      h('Col', {props: {span: 6}}, obj.name),
-                      h('Col', {props: {span: 6}}, obj.path),
-                      h('Col', {props: {span: 6}}, obj.method),
-                      h('Col', {props: {span: 6}}, obj.origin),
+                      h('Col', {props: {span: 8}}, obj.name),
+                      h('Col', {props: {span: 8}}, obj.path),
+                      h('Col', {props: {span: 4}}, obj.method),
+                      h('Col', {props: {span: 4}}, obj.origin),
                       h('Divider')
                     ]
                   )
@@ -89,12 +90,29 @@ export default {
                   type: 'primary',
                   size: 'small'
                 },
+                style: {
+                  marginRight: '5px'
+                },
                 on: {
                   click: () => {
                     this.show(params.index)
                   }
                 }
-              }, '编辑')
+              }, '编辑'),
+              h('Button', {
+                props: {
+                  type: 'primary',
+                  size: 'small'
+                },
+                style: {
+                  marginRight: '5px'
+                },
+                on: {
+                  click: () => {
+                    this.remove(params.row.role)
+                  }
+                }
+              }, '删除')
             ])
           }
 
@@ -115,7 +133,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getRoleList']),
+    ...mapActions(['getRoleList', 'postRoleDel']),
     formatDate (date) {
       return date.substr(0, 10)
     },
@@ -130,22 +148,24 @@ export default {
       this.$router.push({name: 'role/edit', query: {role: this.tableData[idx].role}})
       // this.$Message.info('显示ID：'+this.tableData[idx].id);
     },
-    remove (idx) {
+    remove (name) {
       this.$Modal.confirm({
         loading: true,
         title: '确认删除吗？',
         content: '删除后将不能恢复！！！',
         onOk: () => {
           this.$Modal.remove()
-          // this.postPermissionDel(this.tableData[idx]).then(res=>{
-          //   this.$Message.info('删除成功：' + idx)
-          // }).catch(err => {
-          //   err.response && this.$Message.error({
-          //     content: err.response.data.message,
-          //     duration: 10,
-          //     closable: true
-          //   })
-          // })
+          console.log('remove', name)
+          this.postRoleDel({role: name}).then(res => {
+            this.$Message.info('删除成功：' + name)
+          }).catch(err => {
+            err.response && this.$Message.error({
+              content: err.response.data.message,
+              duration: 10,
+              closable: true
+            })
+            console.log('err', err)
+          })
         }
       })
     },

@@ -1,5 +1,5 @@
 import Main from '@/view/main'
-import parentView from '@/components/parent-view'
+// import parentView from '@/components/parent-view'
 
 /**
  * iview-admin中meta除了原生参数外可配置的参数:
@@ -59,17 +59,17 @@ export default [
           icon: 'ios-people',
           title: '管理员'
         },
-        component: () => import('@/view/casbin/admin/admin.vue')
+        component: () => import('@/view/casbin/admin/index.vue')
       },
       {
-        path: 'role/user',
-        name: 'role/user',
+        path: 'admin/role',
+        name: 'admin/role',
         meta: {
           icon: 'ios-people',
           hideInMenu: true,
           title: '管理员角色'
         },
-        component: () => import('@/view/casbin/role/user.vue')
+        component: () => import('@/view/casbin/admin/role.vue')
       },
       {
         path: 'admin/add',
